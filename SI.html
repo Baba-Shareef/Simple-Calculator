@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interest Calculator</title>
+    <!-- <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            flex-direction: column;
+        }
+
+        div {
+            border: 2px solid black;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input {
+            display: block;
+            margin: 10px auto;
+        }
+    </style> -->
+    <link rel="stylesheet" href="Style.css" </head>
+
+
+<body>
+    <div>
+        <h2>Simple Interest Calculator</h2><br>
+        <form id="calcForm">
+            <label>Clearing Date:</label>
+            <input type="date" id="clearingDate" required><br><br>
+
+            <label>Received Date:</label>
+            <input type="date" id="receivedDate" required><br><br>
+
+            <label>Enter The Principal Amount:</label>
+            <input type="number" id="principal" required><br><br>
+
+            <label>Interest Rate per Month (%):</label>
+            <input type="number" id="interestRate" step="0.01" required><br><br>
+
+            <input type="submit" value="Calculate" style="background-color: rgb(102, 167, 188); color: white; border: none; padding: 10px 20px; cursor: pointer;">
+
+
+        </form>
+
+        <script>
+            document.getElementById("calcForm").addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent page reload
+
+                // Get form values
+                let clearingDate = new Date(document.getElementById("clearingDate").value);
+                let receivedDate = new Date(document.getElementById("receivedDate").value);
+                let principal = parseFloat(document.getElementById("principal").value);
+                let interestRate = parseFloat(document.getElementById("interestRate").value);
+
+                // Validate dates
+                if (clearingDate <= receivedDate) {
+                    alert("Clearing date must be after the received date.");
+                    return;
+                }
+
+                function getExactMonthsAndDays(startDate, endDate) {
+                    let years = endDate.getFullYear() - startDate.getFullYear();
+                    let months = endDate.getMonth() - startDate.getMonth();
+                    let days = endDate.getDate() - startDate.getDate();
+
+                    if (days < 0) {
+                        // Borrow days from the previous month
+                        let previousMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 0);
+                        days += previousMonth.getDate();
+                        months -= 1;
+                    }
+
+                    if (months < 0) {
+                        // Borrow months from the previous year
+                        months += 12;
+                        years -= 1;
+                    }
+
+                    let totalMonths = years * 12 + months;
+                    return { months: totalMonths, days: days };
+                }
+
+                // Get the exact difference in months and days
+                let { months: monthDiff, days: differenceDays } = getExactMonthsAndDays(receivedDate, clearingDate);
+
+                // Calculate interest
+                let amount = Math.floor(principal / 100);
+                let perMonth = amount * interestRate;
+                let totalInterest;
+
+                if (differenceDays === 0) {
+                    totalInterest = monthDiff * perMonth; // Only months
+                } else {
+                    let perDay = perMonth / new Date(clearingDate.getFullYear(), clearingDate.getMonth(), 0).getDate(); // Get actual days in month
+                    let calDays = perDay * differenceDays;
+                    totalInterest = (monthDiff * perMonth) + calDays;
+                }
+                let totalAmount = totalInterest + principal;
+                // localStorage.setItem("totalAmount", totalAmount.toFixed(2));
+
+                // Store data in localStorage
+                localStorage.setItem("calculatedInterest", totalInterest.toFixed(2));
+                localStorage.setItem("principal", principal);
+                localStorage.setItem("months", monthDiff);
+                localStorage.setItem("interestRate", interestRate);
+                localStorage.setItem("totalamount", totalAmount.toFixed(2));
+
+                // Redirect to results page2
+                window.location.href = "output.html";
+            });
+        </script>
+    </div>
+</body>
+
+
+</html>

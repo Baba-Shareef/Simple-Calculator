@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interest Calculation Result</title>
+    <link rel="stylesheet" href="Style.css"
+</head>
+
+
+<body>
+    <div>
+        <h2></h2>
+        <label>Principal Amount:</label>
+        <input type="text" id="principal" readonly><br><br>
+
+        <label>Interest Amount:</label>
+        <input type="text" id="calculatedInterest" readonly><br><br>
+
+        <label>Total Amount:</label>
+        <input type="text" id="totalamount" readonly><br><br>
+
+        <script>
+            document.getElementById("principal").value = localStorage.getItem("principal");
+            document.getElementById("calculatedInterest").value = localStorage.getItem("calculatedInterest");
+            document.getElementById("totalamount").value = localStorage.getItem("totalamount");
+        </script>
+    </div>
+</body>
+
+
+</html>
